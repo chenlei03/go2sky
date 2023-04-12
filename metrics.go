@@ -20,7 +20,6 @@ import (
 	"context"
 	"github.com/SkyAPM/go2sky/internal/tool"
 	"github.com/SkyAPM/go2sky/logger"
-	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
 	"log"
 	"os"
@@ -113,7 +112,7 @@ func (c *MetricCollector) collectMeter() {
 	var rtm runtime.MemStats
 	runtime.ReadMemStats(&rtm)
 	v, _ := mem.VirtualMemory()
-	cpuPercent, _ := cpu.Percent(0, false)
+	//cpuPercent, _ := cpu.Percent(0, false)
 	threadNum, _ := runtime.ThreadCreateProfile(nil)
 	var stats debug.GCStats
 	debug.ReadGCStats(&stats)
@@ -127,8 +126,8 @@ func (c *MetricCollector) collectMeter() {
 		GCPauseTime:  int64(stats.PauseTotal),
 		GoroutineNum: int64(runtime.NumGoroutine()),
 		ThreadNum:    int64(threadNum),
-		CpuUsedRate:  cpuPercent[0],
-		MemUsedRate:  v.UsedPercent,
+		//CpuUsedRate:  cpuPercent[0],
+		MemUsedRate: v.UsedPercent,
 	}
 
 	c.reporter.SendMetrics(runTimeMetric)
